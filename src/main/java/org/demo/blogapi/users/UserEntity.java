@@ -4,15 +4,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import lombok.Getter;
+import lombok.Setter;
 import org.demo.blogapi.articles.ArticleEntity;
 import org.demo.blogapi.commons.BaseEntity;
 
 import java.util.List;
 
 @Entity(name = "users")
+@Getter
+@Setter
 public class UserEntity extends BaseEntity {
     String username;
     String password; //Todo convert into Hash
+    String email;
     String bio;
     String image;
 
