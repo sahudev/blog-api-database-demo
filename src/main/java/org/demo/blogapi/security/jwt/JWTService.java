@@ -1,10 +1,12 @@
-package security.jwt;
+package org.demo.blogapi.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Service
 public class JWTService {
 
     private Algorithm algorithm = Algorithm.HMAC256("SECRET SIGNING KEY (should be in env or config)");

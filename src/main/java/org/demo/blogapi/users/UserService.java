@@ -6,29 +6,31 @@ import org.demo.blogapi.users.dto.UserResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.demo.blogapi.security.jwt.JWTService;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-
     private final PasswordEncoder passwordEncoder;
+    private final JWTService jwtService;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder,JWTService jwtService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
 
     public UserResponseDTO createUser(CreateUserDTO createUserDTO){
-        // TODO Encrypt Password
         // TODO Validate email
         // TODO Check if username already exists
         var newUserEntity = modelMapper.map(createUserDTO,UserEntity.class);
         newUserEntity.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
         var savedUser = userRepository.save(newUserEntity);
         var userResponseDTO = modelMapper.map(savedUser, UserResponseDTO.class);
+        userResponseDTO.setToken(jwtService.createJWT(savedUser.getId()));
         return userResponseDTO;
     }
 
@@ -43,6 +45,8 @@ public class UserService {
             throw new IncorrectPasswordException();
         }
         var userResponseDTO = modelMapper.map(userEntity, UserResponseDTO.class);
+        userResponseDTO.setToken(jwtService.createJWT(userEntity.getId()));
+
         return userResponseDTO;
     }
 

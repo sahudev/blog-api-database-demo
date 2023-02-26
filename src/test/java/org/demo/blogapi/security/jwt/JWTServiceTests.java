@@ -1,12 +1,13 @@
 package org.demo.blogapi.security.jwt;
 
 import org.junit.jupiter.api.Test;
-import security.jwt.JWTService;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DataJpaTest
 public class JWTServiceTests {
 
     private JWTService jwtService = new JWTService();
