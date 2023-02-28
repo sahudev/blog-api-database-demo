@@ -1,12 +1,13 @@
 package org.demo.blogapi.articles;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+
 import org.demo.blogapi.commons.BaseEntity;
 import org.demo.blogapi.users.UserEntity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.util.List;
 
 @Entity(name = "articles")

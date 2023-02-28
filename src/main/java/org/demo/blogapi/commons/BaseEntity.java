@@ -1,10 +1,11 @@
 package org.demo.blogapi.commons;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
+
+import javax.persistence.*;
 import java.util.Date;
 
 @MappedSuperclass
