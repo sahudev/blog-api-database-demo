@@ -1,5 +1,6 @@
 package org.demo.blogapi.users;
 
+import org.demo.blogapi.security.AuthTokens.AuthTokenService;
 import org.demo.blogapi.users.dto.CreateUserDTO;
 import org.demo.blogapi.users.dto.LoginUserDTO;
 import org.demo.blogapi.users.dto.UserResponseDTO;
@@ -14,14 +15,15 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
+    private final AuthTokenService authTokenService;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder,JWTService jwtService) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, JWTService jwtService, AuthTokenService authTokenService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.authTokenService = authTokenService;
     }
-
 
     public UserResponseDTO createUser(CreateUserDTO createUserDTO){
         // TODO Validate email
@@ -34,7 +36,7 @@ public class UserService {
         return userResponseDTO;
     }
 
-    public UserResponseDTO loginUser(LoginUserDTO loginUserDTO){
+    public UserResponseDTO loginUser(LoginUserDTO loginUserDTO, AuthType authType ){
 
         var userEntity = userRepository.findByUsername(loginUserDTO.getUsername());
         if(userEntity==null){
@@ -45,7 +47,15 @@ public class UserService {
             throw new IncorrectPasswordException();
         }
         var userResponseDTO = modelMapper.map(userEntity, UserResponseDTO.class);
-        userResponseDTO.setToken(jwtService.createJWT(userEntity.getId()));
+
+        switch (authType){
+            case JWT:
+                userResponseDTO.setToken(jwtService.createJWT(userEntity.getId()));
+                break;
+            case AUTH_TOKEN:
+                userResponseDTO.setToken(authTokenService.createAuthToken(userEntity).toString());
+                break;
+        }
 
         return userResponseDTO;
     }
@@ -64,5 +74,10 @@ public class UserService {
         public IncorrectPasswordException(){
             super("Incorrect Password");
         }
+    }
+
+    static enum AuthType{
+        JWT,
+        AUTH_TOKEN
     }
 }

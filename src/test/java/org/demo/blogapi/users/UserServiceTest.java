@@ -1,5 +1,6 @@
 package org.demo.blogapi.users;
 
+import org.demo.blogapi.security.AuthTokens.AuthTokenService;
 import org.demo.blogapi.users.dto.CreateUserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ public class UserServiceTest {
             var modelMapper = new ModelMapper();
             var passwordEncoder = new BCryptPasswordEncoder();
             var jwtService = new JWTService();
-            userService = new UserService(userRepository,modelMapper,passwordEncoder, jwtService);
+           // var authTokenService = new AuthTokenService();
+          //  userService = new UserService(userRepository,modelMapper,passwordEncoder, jwtService);
         }
         return userService;
     }

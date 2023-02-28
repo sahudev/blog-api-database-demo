@@ -21,6 +21,7 @@ public class ArticleController {
 
     @GetMapping("/private")
     public String getPrivateArticles(){
+
         return "Private Articles";
     }
 }

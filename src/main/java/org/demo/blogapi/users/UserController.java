@@ -27,8 +27,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> loginUser(@RequestBody LoginUserDTO loginUserDTO) {
-        var loggedUser = userService.loginUser(loginUserDTO);
+    public ResponseEntity<UserResponseDTO> loginUser(
+            @RequestBody LoginUserDTO loginUserDTO,
+            @RequestParam(name = "token", defaultValue = "jwt") String token
+            ) {
+
+        // if token = 'jwt' (default choice) generate JWT. If token = 'auth_token" generate auth_token
+        var authType = UserService.AuthType.JWT;
+        if(token.equals("auth_token")){
+            authType = UserService.AuthType.AUTH_TOKEN;
+        }
+        var loggedUser = userService.loginUser(loginUserDTO, authType);
         return ResponseEntity
                 .ok(loggedUser);
     }
