@@ -1,6 +1,7 @@
 package org.demo.blogapi.articles;
 
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,8 @@ public class ArticleController {
     }
 
     @GetMapping("/private")
-    public String getPrivateArticles(){
+    public String getPrivateArticles(@AuthenticationPrincipal Integer userId){
 
-        return "Private Articles";
+        return "Private Articles for id = " + userId;
     }
 }
